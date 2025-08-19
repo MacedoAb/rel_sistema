@@ -746,8 +746,8 @@ if($marca_dagua == 'Sim'){ ?>
 <hr style="margin-bottom: 0;">
 	<table style="width:100%;">
 		<tr style="width:100%;">
-			<td style="width:60%; font-size: 10px; text-align: left;"><?php echo $nome_sistema ?> Telefone: <?php echo $telefone_sistema ?></td>
-			<td style="width:40%; font-size: 10px; text-align: right;"><p class="page">Página  </p></td>
+			<td style="width:60%; font-size: 9px; text-align: left;"><?php echo $nome_sistema ?> / Endereço: <?php echo $endereco_sistema ?> / Telefone: <?php echo $telefone_sistema ?></td>
+			<td style="width:40%; font-size: 9px; text-align: right;"><p class="page">Página  </p></td>
 		</tr>
 	</table>
 </div>

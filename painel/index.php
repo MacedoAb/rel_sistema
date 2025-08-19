@@ -815,7 +815,7 @@ if($linhas > 0){
 				<div class="col-md-4">
 					<label>Entradas / Saídas</label>
 					<select name="filtro_tipo" class="form-control">
-						<option value="receber">Entradas / Ganhos</option>
+						<option value="receber">Entradas / Receitas</option>
 						<option value="pagar">Saídas / Despesas</option>
 					</select>
 				</div>
