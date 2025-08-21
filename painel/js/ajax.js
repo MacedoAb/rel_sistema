@@ -1,12 +1,14 @@
-$(document).ready(function() {    
+$(document).ready(function() { 
+    $('#listar').text("Carregando Dados...");   
     listar();    
 } );
 
-function listar(p1, p2, p3, p4, p5, p6){	
+function listar(p1, p2, p3, p4, p5, p6){   
+    var id_usuario = localStorage.id_usu;
     $.ajax({
         url: 'paginas/' + pag + "/listar.php",
         method: 'POST',
-        data: {p1, p2, p3, p4, p5, p6},
+        data: {id_usuario},
         dataType: "html",
 
         success:function(result){
@@ -16,9 +18,8 @@ function listar(p1, p2, p3, p4, p5, p6){
     });
 }
 
-
-
-function inserir(){   
+function inserir(){
+    $('#id_usuario').val(localStorage.id_usu);
     $('#mensagem').text('');
     $('#titulo_inserir').text('Inserir Registro');
     $('#modalForm').modal('show');
@@ -28,15 +29,12 @@ function inserir(){
 
 
 
-
-
 $("#form").submit(function () {
 
     event.preventDefault();
     var formData = new FormData(this);
-
-    $('#mensagem').text('Salvando...')
-    $('#btn_salvar').hide();
+    $('#mensagem').text('Carregando!!');
+    $('#btn_salvar').hide();    
 
     $.ajax({
         url: 'paginas/' + pag + "/salvar.php",
@@ -49,9 +47,7 @@ $("#form").submit(function () {
             if (mensagem.trim() == "Salvo com Sucesso") {
 
                 $('#btn-fechar').click();
-                listar();
-
-                $('#mensagem').text('')          
+                listar();          
 
             } else {
 
@@ -60,7 +56,6 @@ $("#form").submit(function () {
             }
 
             $('#btn_salvar').show();
-
         },
 
         cache: false,
@@ -73,10 +68,7 @@ $("#form").submit(function () {
 
 
 
-
-function excluir(id){	
-    $('#mensagem-excluir').text('Excluindo...')
-    
+function excluir(id){
     $.ajax({
         url: 'paginas/' + pag + "/excluir.php",
         method: 'POST',
@@ -84,7 +76,7 @@ function excluir(id){
         dataType: "html",
 
         success:function(mensagem){
-            if (mensagem.trim() == "Excluído com Sucesso") {            	
+            if (mensagem.trim() == "Excluído com Sucesso") {
                 listar();
             } else {
                 $('#mensagem-excluir').addClass('text-danger')
@@ -98,16 +90,62 @@ function excluir(id){
 
 
 
-function ativar(id, acao){	
+function ativar(id, acao){
     $.ajax({
-        url: 'paginas/' + pag + "/mudar-status.php",
+         url: 'paginas/' + pag + "/mudar-status.php",
         method: 'POST',
         data: {id, acao},
+        dataType: "text",
+
+        success: function (mensagem) {
+            if (mensagem.trim() == "Alterado com Sucesso") {
+                 listar();
+            }               
+        },
+
+    });
+}
+
+function voucher(id, nome_cliente, tel_cliente, acao){
+    $.ajax({
+         url: 'paginas/' + pag + "/mudar-status.php",
+        method: 'POST',
+        data: {id, nome_cliente, tel_cliente, acao},
+        dataType: "text",
+
+        success: function (mensagem) {
+            if (mensagem.trim() == "Alterado com Sucesso") {
+                 listar();
+            }               
+        },
+
+    });
+}
+
+function baixar(id, pg, id_listar){    
+    var id_usuario = localStorage.id_usu;
+    $('#mensagem-excluir').text("Baixando!!")
+
+    if(pg != "" && pg != "undefined" && pg != undefined){        
+        pag = pg;        
+    }
+
+    $.ajax({
+        url: 'paginas/' + pag + "/baixar.php",
+        method: 'POST',
+        data: {id, id_usuario},
         dataType: "html",
 
         success:function(mensagem){
-            if (mensagem.trim() == "Alterado com Sucesso") {
-                listar();
+            if (mensagem.trim() == "Baixado com Sucesso") {
+                if(id_listar == "" || id_listar == "undefined" || id_listar == undefined){
+                    listar();
+                }else{
+                    listarContas(id_listar);
+                    alert('Pagamento Confirmado!')
+                }
+                
+                
             } else {
                 $('#mensagem-excluir').addClass('text-danger')
                 $('#mensagem-excluir').text(mensagem)
@@ -115,4 +153,3 @@ function ativar(id, acao){
         }
     });
 }
-
