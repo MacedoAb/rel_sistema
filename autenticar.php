@@ -15,7 +15,7 @@ $linhas = @count($res);
 if($linhas > 0){
 
 	if($res[0]['ativo'] != 'Sim'){
-		echo '<script>window.alert("Seu acesso foi desativado!!")</script>'; 
+		$_SESSION['msg'] = 'Seu acesso foi desativado!';
 		echo '<script>window.location="index.php"</script>';  
 	}
 
@@ -25,7 +25,7 @@ if($linhas > 0){
 
 	echo '<script>window.location="painel"</script>';
 }else{
-	echo '<script>window.alert("Dados Incorretos!!")</script>'; 
+	$_SESSION['msg'] = 'Dados incorretos!';
 	echo '<script>window.location="index.php"</script>';  
 }
 

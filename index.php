@@ -1,5 +1,6 @@
 <?php 
 require_once("conexao.php");
+@session_start();
 
 $query = $pdo->query("SELECT * from usuarios");
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -94,7 +95,7 @@ if($linhas == 0){
 
 						
 														
-															   <form method="post" action="painel">
+															   <form method="post" action="autenticar.php">
 																   <div class="form-group">
 																	   <label>Usuário</label> 
 																	   <input class="form-control" name="usuario" placeholder="Digite seu Usuário" type="text" required>
@@ -186,4 +187,44 @@ $(".toggle-password").click(function() {
     input.attr("type", "password");
   }
 });
+</script>
+
+ <script type="text/javascript">
+	$("#form-recuperar").submit(function () {
+
+		$('#mensagem-recuperar').text('Enviando!!');
+
+		event.preventDefault();
+		var formData = new FormData(this);
+
+		$.ajax({
+			url: "recuperar-senha.php",
+			type: 'POST',
+			data: formData,
+
+			success: function (mensagem) {
+				$('#mensagem-recuperar').text('');
+				$('#mensagem-recuperar').removeClass()
+				if (mensagem.trim() == "Recuperado com Sucesso") {
+									
+					$('#email-recuperar').val('');
+					$('#mensagem-recuperar').addClass('text-success')
+					$('#mensagem-recuperar').text('Sua Senha foi enviada para o Email')			
+
+				} else {
+
+					$('#mensagem-recuperar').addClass('text-danger')
+					$('#mensagem-recuperar').text(mensagem)
+				}
+
+
+			},
+
+			cache: false,
+			contentType: false,
+			processData: false,
+
+		});
+
+	});
 </script>

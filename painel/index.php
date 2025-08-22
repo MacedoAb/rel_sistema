@@ -1,15 +1,61 @@
 <?php 
 @session_start();
+require_once("../conexao.php");
+require_once("verificar.php");
+
+$data_atual = date('Y-m-d');
+$mes_atual = Date('m');
+$ano_atual = Date('Y');
+$data_inicio_mes = $ano_atual."-".$mes_atual."-01";
+$data_inicio_ano = $ano_atual."-01-01";
+
+$data_ontem = date('Y-m-d', strtotime("-1 days",strtotime($data_atual)));
+$data_amanha = date('Y-m-d', strtotime("+1 days",strtotime($data_atual)));
+
+
+if($mes_atual == '04' || $mes_atual == '06' || $mes_atual == '07' || $mes_atual == '09'){
+	$data_final_mes = $ano_atual.'-'.$mes_atual.'-30';
+}else if($mes_atual == '02'){
+	$bissexto = date('L', @mktime(0, 0, 0, 1, 1, $ano_atual));
+	if($bissexto == 1){
+		$data_final_mes = $ano_atual.'-'.$mes_atual.'-29';
+	}else{
+		$data_final_mes = $ano_atual.'-'.$mes_atual.'-28';
+	}
+
+}else{
+	$data_final_mes = $ano_atual.'-'.$mes_atual.'-31';
+}
+
+
+
 $pag_inicial = 'home';
+if(@$_SESSION['nivel'] != 'Administrador'){
+	require_once("verificar_permissoes.php");
+}
 
 if(@$_GET['pagina'] != ""){
-    $pagina = @$_GET['pagina'];
+	$pagina = @$_GET['pagina'];
 }else{
-    $pagina = $pag_inicial;
+	$pagina = $pag_inicial;
+}
+
+$id_usuario = @$_SESSION['id'];
+$query = $pdo->query("SELECT * from usuarios where id = '$id_usuario'");
+$res = $query->fetchAll(PDO::FETCH_ASSOC);
+$linhas = @count($res);
+if($linhas > 0){
+	$nome_usuario = $res[0]['nome'];
+	$email_usuario = $res[0]['email'];
+	$telefone_usuario = $res[0]['telefone'];
+	$senha_usuario = $res[0]['senha'];
+	$nivel_usuario = $res[0]['nivel'];
+	$foto_usuario = $res[0]['foto'];
+	$endereco_usuario = $res[0]['endereco'];
 }
 
 ?>
-<!doctype html>
+<!DOCTYPE HTML>
 <html lang="pt-BR" dir="ltr">
 	
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -23,7 +69,7 @@ if(@$_GET['pagina'] != ""){
         <meta name="Author" content="Samuel Lima">
         <meta name="Keywords" content="fluxo, comunicacao, inteligente, marketing, whatsapp"/>
 
-		<title>NOME DO SISTEMA</title>
+		<title><?php echo $nome_sistema ?></title>
 
 		<link rel="icon" href="../assets/img/comum/favicon.png" type="image/x-icon"/>
 		<link href="../assets/css/icons.css" rel="stylesheet">
@@ -97,16 +143,16 @@ if(@$_GET['pagina'] != ""){
 
 											<li class="dropdown nav-item  main-header-message ">
 												<a class="new nav-link"  data-bs-toggle="dropdown" href="javascript:void(0);">
-													<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" width="24" height="24" viewBox="0 0 24 24"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z"/></svg>
-													<span class="badge bg-secondary header-badge">5</span>
+													<small><i class="fa fa-money" style="color:#d8f6e1;"></i></small>
+													<span class="badge header-badge" style="background:green">5</span>
 												</a>
 												<div class="dropdown-menu">
 													<div class="menu-header-content text-start border-bottom">
 														<div class="d-flex">
-															<h6 class="dropdown-title mb-1 tx-15 font-weight-semibold">Messages</h6>
+															<h6 class="dropdown-title mb-1 tx-15 font-weight-semibold">Constas à Receber</h6>
 															<span class="badge badge-pill badge-warning ms-auto my-auto float-end">Mark All Read</span>
 														</div>
-														<p class="dropdown-title-text subtext mb-0 op-6 pb-0 tx-12 ">You have 4 unread messages</p>
+														<p class="dropdown-title-text subtext mb-0 op-6 pb-0 tx-12 "><?php echo $linhas ?> Contas Vencidas </p>
 													</div>
 													<div class="main-message-list chat-scroll">
 														<a href="chat.html" class="dropdown-item d-flex border-bottom">
@@ -195,7 +241,7 @@ if(@$_GET['pagina'] != ""){
 													</div>
 													<a class="dropdown-item" href="" data-bs-target="#modalPerfil" data-bs-toggle="modal"><i class="fa fa-user"></i>Perfil</a>	
 													<a class="dropdown-item" href=""><i class="fa fa-cogs"></i>  Configurações</a>
-													<a class="dropdown-item" href="sair.php"><i class="fa fa-arrow-left"></i> Sair</a>
+													<a class="dropdown-item" href="logout.php"><i class="fa fa-arrow-left"></i> Sair</a>
 												</div>
 											</li>
 										</ul>

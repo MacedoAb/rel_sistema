@@ -1264,14 +1264,14 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
     color: #fff;
-    background-color: #f74f75;
-    border-color: #f5567b;
+    background-color: #08232a;
+    border-color: #08232a;
 }
 
 .btn-secondary:hover {
     color: #fff;
-    background-color: #f33461;
-    border-color: rgb(245, 86, 142);
+    background-color: #08232a;
+    border-color: #08232a;
 }
 
 .btn-secondary:focus,
