@@ -6,12 +6,12 @@ date_default_timezone_set('America/Sao_Paulo');
 $url_sistema = "http://$_SERVER[HTTP_HOST]/";
 $url = explode("//", $url_sistema);
 if($url[1] == 'localhost/'){
-	$url_sistema = "http://$_SERVER[HTTP_HOST]/novo_painel/";
+	$url_sistema = "http://$_SERVER[HTTP_HOST]/painel_sistema/";
 }
 
 //dados conexão bd local
 $servidor = 'localhost';
-$banco = 'novo_painel';
+$banco = 'painel_sistema';
 $usuario = 'root';
 $senha = '';
 
